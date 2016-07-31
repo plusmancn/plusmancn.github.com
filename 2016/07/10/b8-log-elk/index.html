@@ -1,0 +1,764 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js,node," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="原由今天7月10号，到8月10号，正好来搜车前端一年。刚来这时，还是个 Noder 新手，当然现在也是。那时面对百万行数量级的代码，一旦出个问题又没有错误栈，简直就是梦魇~。当面对线上 bug 时，便是这种窘境，然后本地测试下来，却又是好的，抓狂。情急之下，先拿 sentry 顶了一段时间，项目主要应用如下：  
+
+系统未捕获错误记录
+邮件告警提醒
+本身也是个优秀的协作平台
+
+就这么熬了大半年，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日志规范化与分析监控">
+<meta property="og:url" content="http://yoursite.com/2016/07/10/b8-log-elk/index.html">
+<meta property="og:site_name" content="plusman">
+<meta property="og:description" content="原由今天7月10号，到8月10号，正好来搜车前端一年。刚来这时，还是个 Noder 新手，当然现在也是。那时面对百万行数量级的代码，一旦出个问题又没有错误栈，简直就是梦魇~。当面对线上 bug 时，便是这种窘境，然后本地测试下来，却又是好的，抓狂。情急之下，先拿 sentry 顶了一段时间，项目主要应用如下：  
+
+系统未捕获错误记录
+邮件告警提醒
+本身也是个优秀的协作平台
+
+就这么熬了大半年，">
+<meta property="og:image" content="http://image-2.plusman.cn/image/elk-souche-alert-v1.0.png">
+<meta property="og:updated_time" content="2016-07-27T04:15:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="日志规范化与分析监控">
+<meta name="twitter:description" content="原由今天7月10号，到8月10号，正好来搜车前端一年。刚来这时，还是个 Noder 新手，当然现在也是。那时面对百万行数量级的代码，一旦出个问题又没有错误栈，简直就是梦魇~。当面对线上 bug 时，便是这种窘境，然后本地测试下来，却又是好的，抓狂。情急之下，先拿 sentry 顶了一段时间，项目主要应用如下：  
+
+系统未捕获错误记录
+邮件告警提醒
+本身也是个优秀的协作平台
+
+就这么熬了大半年，">
+<meta name="twitter:image" content="http://image-2.plusman.cn/image/elk-souche-alert-v1.0.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/10/b8-log-elk/"/>
+
+  <title> 日志规范化与分析监控 | plusman </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6cd67e266b6f6c040659bdb49c2e7c7a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">plusman</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                日志规范化与分析监控
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-10T12:10:37+08:00" content="2016-07-10">
+              2016-07-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/10/b8-log-elk/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/b8-log-elk/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://image-2.plusman.cn/image/elk-souche-alert-v1.0.png" alt="系统概览"></p>
+<h2 id="原由"><a href="#原由" class="headerlink" title="原由"></a>原由</h2><p>今天7月10号，到8月10号，正好来搜车前端一年。<br>刚来这时，还是个 Noder 新手，当然现在也是。那时面对百万行数量级的代码，一旦出个问题又没有错误栈，简直就是梦魇~。当面对线上 bug 时，便是这种窘境，然后本地测试下来，却又是好的，抓狂。<br>情急之下，先拿 <a href="https://getsentry.com/welcome/" target="_blank" rel="external">sentry</a> 顶了一段时间，项目主要应用如下：  </p>
+<ul>
+<li>系统未捕获错误记录</li>
+<li>邮件告警提醒</li>
+<li>本身也是个优秀的协作平台</li>
+</ul>
+<p>就这么熬了大半年，慢慢的也凸显出一些问题，比如：  </p>
+<ul>
+<li>仅仅是对错误栈的记录，缺少对上下文环境的记录， 对 bug 调试帮助有限。</li>
+<li>搜索功能相对薄弱，历史可回溯性差。</li>
+<li>团队开始有日志规范化、集群日志监控的需求，这显然不是 sentry 能做的。  </li>
+</ul>
+<p>于是有了 ELK + Souche-Alert 的演进。</p>
+<a id="more"></a>
+<h2 id="ELK"><a href="#ELK" class="headerlink" title="ELK"></a>ELK</h2><p>俗称日志分析3剑客，是 Elasticsearch + logstash + kibana 的简称，网上搜到很多关于它们的资料，这里就简要说下几个关键配置，可配合首页图理解作用。</p>
+<h3 id="filebeta-日志收割机"><a href="#filebeta-日志收割机" class="headerlink" title="filebeta 日志收割机"></a>filebeta 日志收割机</h3><p><a href="https://www.elastic.co/downloads/beats/filebeat" target="_blank" rel="external">filebeat 下载地址</a> ，无需安装可直接执行 <code>bin</code> 命令<br><strong>启动 filebeta</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./filebeat -e -c filebeat.yml -d &apos;*&apos;</div></pre></td></tr></table></figure></p>
+<p><strong>配置文件</strong>  </p>
+<ul>
+<li>设置需要监听的日志路径</li>
+<li>设置 logstash 地址</li>
+<li>记得确认下 Elasticsearch 的默认配置有没有移除<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">filebeat:</div><div class="line">  # List of prospectors to fetch data.</div><div class="line">  prospectors:</div><div class="line">    # Each - is a prospector. Below are the prospector specific configurations</div><div class="line">    -</div><div class="line">      # Paths that should be crawled and fetched. Glob based paths.</div><div class="line">      # To fetch all &quot;.log&quot; files from a specific level of subdirectories</div><div class="line">      # /var/log/*/*.log can be used.</div><div class="line">      # For each file found under this path, a harvester is started.</div><div class="line">      # Make sure not file is defined twice as this can lead to unexpected behaviour.</div><div class="line">      paths:</div><div class="line">        - /tmp/bunyan-cheniu-error.log</div><div class="line">        # - /var/log/*.log</div><div class="line">        #- c:\programdata\elasticsearch\logs\*</div><div class="line">### Logstash as output</div><div class="line">logstash:</div><div class="line">  # The Logstash hosts</div><div class="line">  hosts: [&quot;127.0.0.1:5043&quot;]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="logstash-日志中转站"><a href="#logstash-日志中转站" class="headerlink" title="logstash 日志中转站"></a>logstash 日志中转站</h3><p><a href="https://www.elastic.co/downloads/logstash" target="_blank" rel="external">logstash 下载地址</a><br><strong>启动 logstash</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/logstash -f config/cheniu.conf</div></pre></td></tr></table></figure></p>
+<p><strong>配置 logstash</strong><br>日志格式选择的是 JSON 格式，默认模板会对所有 String 类型的字段做索引和分词操作，这里使用了自定义的模板，指定某些字段，不需要进行索引，以提高 ElasticSearch 的搜索性能 &amp; 节省存储空间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"># The # character at the beginning of a line indicates a comment. Use</div><div class="line"># comments to describe your configuration.</div><div class="line"># filebeats 中的 hosts 配置需要和这里对应，这里选择了对分析最友好的 json log 格式</div><div class="line">input &#123;</div><div class="line">    beats &#123;</div><div class="line">        type =&gt; &quot;cheniu_api_server&quot;</div><div class="line">        port =&gt; &quot;5043&quot;</div><div class="line">        codec =&gt; &quot;json&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"># The filter part of this file is commented out to indicate that it is</div><div class="line"># optional.</div><div class="line">filter &#123;</div><div class="line">&#125;</div><div class="line">output &#123;</div><div class="line">    elasticsearch &#123;</div><div class="line">        index =&gt; &apos;cheniu-api-test-%&#123;+YYYY.MM.dd&#125;&apos;</div><div class="line">        template =&gt; &apos;/home/yourname/logdir/logstash-2.3.2/config/cheniu-api-template.json&apos;</div><div class="line">        template_name =&gt; &apos;cheniu-api&apos;</div><div class="line">        template_overwrite =&gt; true</div><div class="line">    &#125;</div><div class="line">    stdout &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以在 logstash 的项目内搜索 <code>elasticsearch-template.json</code> 看到默认模板。下面是自定义优化过的模板，主要更改在 <code>properties</code> 部分。暂时还没有中文分词的需求，如果有的话，需要对包含中文的字段指定分词引擎。<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"template"</span> : <span class="string">"cheniu-api-*"</span>,</div><div class="line">  <span class="attr">"settings"</span> : &#123;</div><div class="line">    <span class="attr">"index.refresh_interval"</span> : <span class="string">"10s"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"mappings"</span> : &#123;</div><div class="line">    <span class="attr">"_default_"</span> : &#123;</div><div class="line">      <span class="attr">"_all"</span> : &#123;<span class="attr">"enabled"</span> : <span class="literal">true</span>, <span class="attr">"omit_norms"</span> : <span class="literal">true</span>&#125;,</div><div class="line">      <span class="attr">"dynamic_templates"</span> : [ &#123;</div><div class="line">        <span class="attr">"message_field"</span> : &#123;</div><div class="line">          <span class="attr">"match"</span> : <span class="string">"message"</span>,</div><div class="line">          <span class="attr">"match_mapping_type"</span> : <span class="string">"string"</span>,</div><div class="line">          <span class="attr">"mapping"</span> : &#123;</div><div class="line">            <span class="attr">"type"</span> : <span class="string">"string"</span>, <span class="attr">"index"</span> : <span class="string">"analyzed"</span>, <span class="attr">"omit_norms"</span> : <span class="literal">true</span>,</div><div class="line">            <span class="attr">"fielddata"</span> : &#123; <span class="attr">"format"</span> : <span class="string">"disabled"</span> &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;, &#123;</div><div class="line">        <span class="attr">"string_fields"</span> : &#123;</div><div class="line">          <span class="attr">"match"</span> : <span class="string">"*"</span>,</div><div class="line">          <span class="attr">"match_mapping_type"</span> : <span class="string">"string"</span>,</div><div class="line">          <span class="attr">"mapping"</span> : &#123;</div><div class="line">            <span class="attr">"type"</span> : <span class="string">"string"</span>, <span class="attr">"index"</span> : <span class="string">"analyzed"</span>, <span class="attr">"omit_norms"</span> : <span class="literal">true</span>,</div><div class="line">            <span class="attr">"fielddata"</span> : &#123; <span class="attr">"format"</span> : <span class="string">"disabled"</span> &#125;,</div><div class="line">            <span class="attr">"fields"</span> : &#123;</div><div class="line">              <span class="attr">"raw"</span> : &#123;<span class="attr">"type"</span>: <span class="string">"string"</span>, <span class="attr">"index"</span> : <span class="string">"not_analyzed"</span>, <span class="attr">"ignore_above"</span> : <span class="number">256</span>&#125;</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125; ],</div><div class="line">      <span class="attr">"properties"</span> : &#123;</div><div class="line">        <span class="attr">"name"</span>: &#123;<span class="attr">"type"</span>: <span class="string">"string"</span>, <span class="attr">"index"</span>: <span class="string">"not_analyzed"</span>&#125;,</div><div class="line">        <span class="attr">"req_id"</span>: &#123;<span class="attr">"type"</span>: <span class="string">"string"</span>, <span class="attr">"index"</span>: <span class="string">"not_analyzed"</span>&#125;,</div><div class="line">        <span class="attr">"@timestamp"</span>: &#123; <span class="attr">"type"</span>: <span class="string">"date"</span> &#125;,</div><div class="line">        <span class="attr">"@version"</span>: &#123; <span class="attr">"type"</span>: <span class="string">"string"</span>, <span class="attr">"index"</span>: <span class="string">"not_analyzed"</span> &#125;,</div><div class="line">        <span class="attr">"geoip"</span>  : &#123;</div><div class="line">          <span class="attr">"dynamic"</span>: <span class="literal">true</span>,</div><div class="line">          <span class="attr">"properties"</span> : &#123;</div><div class="line">            <span class="attr">"ip"</span>: &#123; <span class="attr">"type"</span>: <span class="string">"ip"</span> &#125;,</div><div class="line">            <span class="attr">"location"</span> : &#123; <span class="attr">"type"</span> : <span class="string">"geo_point"</span> &#125;,</div><div class="line">            <span class="attr">"latitude"</span> : &#123; <span class="attr">"type"</span> : <span class="string">"float"</span> &#125;,</div><div class="line">            <span class="attr">"longitude"</span> : &#123; <span class="attr">"type"</span> : <span class="string">"float"</span> &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h3><p><a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="external">ElasticSearch 下载地址</a> ，同样免安装，目前还没有集群需求，所以拿来就能用。</p>
+<h3 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h3><p><a href="https://www.elastic.co/products/kibana" target="_blank" rel="external">kibana</a> 强大的日志可视化面板，配置下 ElasticSearch 地址后，即可使用。</p>
+<h3 id="Souche-Alert"><a href="#Souche-Alert" class="headerlink" title="Souche-Alert"></a>Souche-Alert</h3><p>Elastic 公司有 <a href="https://www.elastic.co/products/watcher" target="_blank" rel="external">watcher</a> 的商用产品，嫌配置略繁、灵活性不够 + 收费，自己用 Node 撸了一个告警中心，大概原理是定时调用 ElasticSearch 的搜索 Api，查询错误日志，根据触发逻辑，判断是否需要发送告警邮件。<br>好处如下：  </p>
+<ul>
+<li>javascript 的技术栈 谁都能上去写几个监控。（我在前端团队）</li>
+<li>原理够简单粗暴，所以足够稳定，调试也很简单。</li>
+<li>Free！</li>
+</ul>
+<h2 id="Log-的生成约定"><a href="#Log-的生成约定" class="headerlink" title="Log 的生成约定"></a>Log 的生成约定</h2><p>针对 <a href="https://github.com/trentm/node-bunyan" target="_blank" rel="external">bunyan</a> 团队内部又做了一层封装，做了一个叫做 bylog 的私有 npm 包，用于生成 json 格式的日志。<br>做了如下改进：  </p>
+<ul>
+<li>node xx.js | bunyan 命令更改为一个可配置参数，用于日志格式化输出。</li>
+<li>增加 meta 字段支持，用于记录额外的上下文信息。</li>
+<li>增加静默通道，日志可选择只输出到文件，用于请求信息的记录。</li>
+<li>为防止日志索引内出现 name.xxx.cc 的 name 字段，对 json 日志第二层后的数据用 util.inspect 做了最多5层的转义，考虑到性能，不能再多了。</li>
+</ul>
+<h3 id="框架集成"><a href="#框架集成" class="headerlink" title="框架集成"></a>框架集成</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> bylog = <span class="built_in">require</span>(<span class="string">'../'</span>);</div><div class="line"><span class="comment">// 终端输出格式化，做了 node xxx.js | bunyan 的事</span></div><div class="line"><span class="keyword">const</span> logOutput = <span class="built_in">require</span>(<span class="string">'../lib/log_output.js'</span>); </div><div class="line"></div><div class="line"><span class="comment">// 支持 bunyan (https://github.com/trentm/node-bunyan) 所有参数 </span></div><div class="line"><span class="keyword">let</span> logOpt = &#123;</div><div class="line">    name: <span class="string">'cheniu-pro'</span>,</div><div class="line">    src: <span class="literal">false</span>,</div><div class="line">    streams: [</div><div class="line">        &#123;</div><div class="line">            level: <span class="string">'info'</span>,</div><div class="line">            path: <span class="string">'/tmp/bunyan-cheniu-pro.log'</span>,</div><div class="line">            mute: <span class="literal">true</span> <span class="comment">// 只输出到文件，不在终端输出，呼应输出函数 Options mute 参数</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            level: <span class="string">'trace'</span>,</div><div class="line">            stream: logOutput <span class="comment">// process.stdout</span></div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">let</span> byLog = bylog.createLogger(logOpt);</div></pre></td></tr></table></figure>
+<h3 id="level-约定"><a href="#level-约定" class="headerlink" title="level 约定"></a>level 约定</h3><p>The log <a href="https://github.com/trentm/node-bunyan#levels" target="_blank" rel="external">levels</a> in bunyan are as follows. The level descriptions are best practice opinions of the author.</p>
+<ul>
+<li>“fatal” (60): The service/app is going to stop or become unusable now. An operator should definitely look into this soon.</li>
+<li>“error” (50): Fatal for a particular request, but the service/app continues servicing other requests. An operator should look at this soon(ish).</li>
+<li>“warn” (40): A note on something that should probably be looked at by an operator eventually.</li>
+<li>“info” (30): Detail on regular operation.</li>
+<li>“debug” (20): Anything else, i.e. too verbose to be included in “info” level.</li>
+<li>“trace” (10): Logging from external libraries used by your app or very detailed application logging.</li>
+</ul>
+<p><strong>info（含）以上级别日志将被记录到日志平台，level:&gt;=50 日志，会有邮件警告，需要立即处理。</strong></p>
+<p>在项目内，通过如下函数输出不同级别日志，byLog 挂载在 global 对象上。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">byLog.&#123;level&#125;(err[, meta[, append]]);</div><div class="line">- &#123;<span class="built_in">Error</span>|<span class="built_in">String</span>&#125;err   <span class="built_in">Error</span> 对象或者字符串.</div><div class="line">- &#123;<span class="built_in">JSON</span>|<span class="built_in">String</span>&#125;meta  [可选] 用于记录错误发生时的上下文信息</div><div class="line">- &#123;<span class="built_in">JSON</span>&#125;append [可选] 目前支持如下参数</div><div class="line">  - &#123;<span class="built_in">String</span>&#125;req_id  请求唯一 id，项目内可以从 req.x_request_id 上获取，用于将报错和某次 API 请求绑定</div><div class="line">  - &#123;<span class="built_in">Boolean</span>&#125;mute 默认 <span class="literal">false</span>，强制不在终端输出</div><div class="line"></div><div class="line"><span class="comment">// 示例 Test</span></div><div class="line">byLog.trace(<span class="string">'trace message here'</span>);</div><div class="line">byLog.debug(<span class="string">'debug message here'</span>, <span class="string">'meta message here'</span>);</div><div class="line">byLog.info(<span class="string">'info message here'</span>, &#123;infoKey: <span class="string">'infoValue'</span>&#125;);</div><div class="line">byLog.warn(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'warn message here'</span>), &#123;infoKey: <span class="string">'infoValue'</span>&#125;);</div><div class="line">byLog.error(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'error message here'</span>), &#123;</div><div class="line">    url: <span class="string">'http://www.souche.com'</span>,</div><div class="line">    token: &#123;</div><div class="line">        <span class="keyword">from</span>: <span class="string">'usercenter'</span>,</div><div class="line">        value: <span class="string">'jdi90knen'</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">byLog.fatal(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'fatal message here'</span>), <span class="literal">null</span>, &#123;req_id: <span class="string">'xxx'</span>&#125;);</div></pre></td></tr></table></figure></p>
+<p><strong>注意：！并不是所有 Error 都需要 error（含）以上级别，根据影响程度，由开发者自行决定</strong></p>
+<h2 id="日志类型"><a href="#日志类型" class="headerlink" title="日志类型"></a>日志类型</h2><h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p><strong>收集渠道</strong>  </p>
+<ul>
+<li>系统未捕获错误，埋点如下，输出级别为 <code>error</code>。  </li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">process.on(<span class="string">'uncaughtException'</span>, processErrorHandler);</div><div class="line">process.on(<span class="string">'unhandledRejection'</span>, processErrorHandler);</div></pre></td></tr></table></figure>
+<ul>
+<li>程序内 byLog 的输出</li>
+<li>console.error 等于 byLog.error</li>
+<li>针对 Express 可做如下埋点  </li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 在所有路由最后，添加错误处理，必须同时含有四个参数</span></div><div class="line"><span class="comment">// http://expressjs.com/en/guide/error-handling.html</span></div><div class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">err, req, res, next</span>) </span>&#123;</div><div class="line">    res.send(&#123;</div><div class="line">        code: <span class="number">500</span>,</div><div class="line">        message: <span class="string">`System Error! Please send serial number <span class="subst">$&#123;req.x_request_id&#125;</span> to administer`</span></div><div class="line">    &#125;);</div><div class="line">    byLog.error(err, <span class="literal">null</span>, &#123;</div><div class="line">        req_id: req.x_request_id</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="请求链路信息"><a href="#请求链路信息" class="headerlink" title="请求链路信息"></a>请求链路信息</h3><p>bylog 框架内有个中间件，做了如下事情</p>
+<ul>
+<li>如果请求 <code>header</code> 部分未指定 <code>X-Request-Id</code>，则系统自动填充格式如 <code>w{weeks}{day of week}_uuid</code> 值。  </li>
+<li>默认记录每次 API 请求的完整参数、头部信息，并在 Express 的 <code>req.x_request_id</code> 上绑定本次请求的 <code>X-Request-Id</code>。  </li>
+<li>在 API 响应体 <code>header</code> 部分返回 <code>X-Request-Id</code> 字段。</li>
+</ul>
+<p>在 Express 的实际应用中，我们还对 res.send 函数做了一次 hack，将 json 格式的返回记录下来，并将请求对象通过 <code>req.x_request_id</code> 进行进行关联。</p>
+<blockquote>
+<p>res.send 函数有个暗坑，如果你传一个 json 对象进去，那么函数会先进行一轮类型判断，将 json 转换为字符串后，再次回调 res.send。</p>
+</blockquote>
+<p>最佳实践：<br>错误输出的时候传入 <code>req.x_request_id</code> 值，将错误和某个请求进行关联。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">byLog.fatal(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'fatal message here'</span>), &#123;key: <span class="string">'keyValue'</span>&#125;, &#123;req_id: <span class="string">'xxx'</span>&#125;);</div></pre></td></tr></table></figure></p>
+<p>在日志面板搜索栏输入如下语句，即可将某次请求的所有日志信息聚合查看（注意搜索时候，时间范围的选择）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">req_id: &apos;w224_9666a363-af8b-4c8a-a5f4-312078763961&apos;</div></pre></td></tr></table></figure></p>
+<p>测试联调阶段，测试人员抓包后，只需将 <code>X-Request-Id</code> 值给服务端人员即可。<br>发现线上问题，同理也可看到完整的链路信息。</p>
+<h3 id="自定义监控逻辑"><a href="#自定义监控逻辑" class="headerlink" title="自定义监控逻辑"></a>自定义监控逻辑</h3><p><strong>针对关键指标，可以通过 ElasticSearch 的日志搜索功能，在Souche-Alert 书写自定义的监控逻辑</strong></p>
+<p>例如队列健康状态监控，关键业务指标，自由发挥。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="http://kibana.logstash.es/content/logstash/examples/nginx-access.html" target="_blank" rel="external">ELKstack 中文指南</a>  </li>
+<li><a href="https://www.elastic.co/" target="_blank" rel="external">elastic 的产品文档们</a></li>
+</ul>
+<h2 id="写在最后的话"><a href="#写在最后的话" class="headerlink" title="写在最后的话"></a>写在最后的话</h2><p>日志规范化与分析监控是一个漫长但是有意义的过程，规范化是分析监控的基础，一团乱麻是理不清的。这需要持续的耐心和推动，但是复出总归会有回报的，看着干净的日志输出、能比用户先发现问题，便是满满的愉悦感。  </p>
+<p>一些还在内部使用的工具包，向芋头大大咨询下意见，应该很快就能作为一个方案打包开源。  </p>
+<p>日志规范化与分析监控，搜车也还有很多路要走，比如  </p>
+<ul>
+<li>网络 I/O 的监控</li>
+<li>elk 的集群部署</li>
+<li>日志的清洗和静默规则</li>
+<li>kibana 数据可视化的利用</li>
+<li>更加多样化的告警渠道，如微信、短信</li>
+<li>多技术栈的兼容，如 node，java，ruby  </li>
+<li>…</li>
+</ul>
+<p>愿天下没有 P0 bug</p>
+<p>PS: 今天我生日</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+            <a href="/tags/node/" rel="tag">#node</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/09/b7-error-catch/" rel="next" title="callback 和 promise 的错误捕获">
+                <i class="fa fa-chevron-left"></i> callback 和 promise 的错误捕获
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/20/b9-npm-assistor/" rel="prev" title="npm-assistor, npm 包初始化和 git tag 辅助工具">
+                npm-assistor, npm 包初始化和 git tag 辅助工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/10/b8-log-elk/"
+           data-title="日志规范化与分析监控" data-url="http://yoursite.com/2016/07/10/b8-log-elk/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/4994682?v=3&s=460"
+               alt="plusman" />
+          <p class="site-author-name" itemprop="name">plusman</p>
+          <p class="site-description motion-element" itemprop="description">Noder，励志伪全栈</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/plusmancn" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/plusmancn" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/liu-jia-nan-90" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              传送门
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://xtutu.me/" title="Xtutu" target="_blank">Xtutu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原由"><span class="nav-number">1.</span> <span class="nav-text">原由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK"><span class="nav-number">2.</span> <span class="nav-text">ELK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#filebeta-日志收割机"><span class="nav-number">2.1.</span> <span class="nav-text">filebeta 日志收割机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logstash-日志中转站"><span class="nav-number">2.2.</span> <span class="nav-text">logstash 日志中转站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ElasticSearch"><span class="nav-number">2.3.</span> <span class="nav-text">ElasticSearch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kibana"><span class="nav-number">2.4.</span> <span class="nav-text">Kibana</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Souche-Alert"><span class="nav-number">2.5.</span> <span class="nav-text">Souche-Alert</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log-的生成约定"><span class="nav-number">3.</span> <span class="nav-text">Log 的生成约定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#框架集成"><span class="nav-number">3.1.</span> <span class="nav-text">框架集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-约定"><span class="nav-number">3.2.</span> <span class="nav-text">level 约定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志类型"><span class="nav-number">4.</span> <span class="nav-text">日志类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误日志"><span class="nav-number">4.1.</span> <span class="nav-text">错误日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求链路信息"><span class="nav-number">4.2.</span> <span class="nav-text">请求链路信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义监控逻辑"><span class="nav-number">4.3.</span> <span class="nav-text">自定义监控逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在最后的话"><span class="nav-number">6.</span> <span class="nav-text">写在最后的话</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">plusman</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"plusman"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="node性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Written with vim
+
+
+
+
+把复杂拆分成简单，将简单组合成强大，再用强大去解决复杂。-- Unix的设计思想之一
+
+最近在做公司消息中心的重构，是个大坑。老代码会把大批量的任务往内存里面塞入，经常跑着就不知道那里挂了，然后任务也丢失了。重构主要做了如下几件事
+
+API功能单一化（降低API粒度）
+将任务队列化并做持久存储，做成消费模型
+工作进程之间的相互独立，防止互相干扰。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(node性能优化二) API粒度实践">
+<meta property="og:url" content="http://yoursite.com/2016/01/11/b4-mini-unit/index.html">
+<meta property="og:site_name" content="plusman">
+<meta property="og:description" content="Written with vim
+
+
+
+
+把复杂拆分成简单，将简单组合成强大，再用强大去解决复杂。-- Unix的设计思想之一
+
+最近在做公司消息中心的重构，是个大坑。老代码会把大批量的任务往内存里面塞入，经常跑着就不知道那里挂了，然后任务也丢失了。重构主要做了如下几件事
+
+API功能单一化（降低API粒度）
+将任务队列化并做持久存储，做成消费模型
+工作进程之间的相互独立，防止互相干扰。">
+<meta property="og:image" content="http://image-2.plusman.cn/image/wpid-Photo-Apr-4-2013-105-PM.jpg">
+<meta property="og:image" content="http://image-2.plusman.cn/image/push-send-model.png">
+<meta property="og:image" content="http://image-2.plusman.cn/image/push-schedule-model.png">
+<meta property="og:updated_time" content="2016-02-29T02:20:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(node性能优化二) API粒度实践">
+<meta name="twitter:description" content="Written with vim
+
+
+
+
+把复杂拆分成简单，将简单组合成强大，再用强大去解决复杂。-- Unix的设计思想之一
+
+最近在做公司消息中心的重构，是个大坑。老代码会把大批量的任务往内存里面塞入，经常跑着就不知道那里挂了，然后任务也丢失了。重构主要做了如下几件事
+
+API功能单一化（降低API粒度）
+将任务队列化并做持久存储，做成消费模型
+工作进程之间的相互独立，防止互相干扰。">
+<meta name="twitter:image" content="http://image-2.plusman.cn/image/wpid-Photo-Apr-4-2013-105-PM.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/01/11/b4-mini-unit/"/>
+
+  <title> (node性能优化二) API粒度实践 | plusman </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6cd67e266b6f6c040659bdb49c2e7c7a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">plusman</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                (node性能优化二) API粒度实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-11T19:10:49+08:00" content="2016-01-11">
+              2016-01-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/11/b4-mini-unit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/11/b4-mini-unit/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Written with <a href="http://www.vim.org/" target="_blank" rel="external">vim</a></p>
+</blockquote>
+<hr>
+<p><img src="http://image-2.plusman.cn/image/wpid-Photo-Apr-4-2013-105-PM.jpg" alt="simple vs complex"></p>
+<blockquote>
+<p>把复杂拆分成简单，将简单组合成强大，再用强大去解决复杂。<code>--</code> Unix的设计思想之一</p>
+</blockquote>
+<p>最近在做公司消息中心的重构，是个大坑。老代码会把大批量的任务往内存里面塞入，经常跑着就不知道那里挂了，然后任务也丢失了。<br>重构主要做了如下几件事</p>
+<ol>
+<li>API功能单一化（降低API粒度）</li>
+<li>将任务队列化并做持久存储，做成消费模型</li>
+<li>工作进程之间的相互独立，防止互相干扰。</li>
+</ol>
+<hr>
+<a id="more"></a>
+<blockquote>
+<p>关于API粒度，粗细各有好处，在这不敢妄下定论，只结合特定场景，给些实践心得。至于如何把握，是经验的积累，不停的摸索，最重要的是弄清场景下的需求。</p>
+</blockquote>
+<h2 id="I-O-角度上的WEB-API粒度"><a href="#I-O-角度上的WEB-API粒度" class="headerlink" title="I/O 角度上的WEB API粒度"></a>I/O 角度上的WEB API粒度</h2><p>记得以前写web api的时候，在controller层面会要求尽量精简，一般只会做外部参数校验，然后具体功能是对service层的转发，service层包含业务逻辑，会是一些更基础服务的组合。<br>这样做的一个好处是，如果service层的功能A需要调用到功能B，无需走网络I/O，可以直接走内存。  </p>
+<p>下表是不同 I/O 类型及其对应的开销(摘录自《深入浅出node.js》P48)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">I/O 类型</th>
+<th style="text-align:left">花费的 CPU 时钟周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CPU 一级缓存</td>
+<td style="text-align:left">3</td>
+</tr>
+<tr>
+<td style="text-align:left">CPU 二级缓存</td>
+<td style="text-align:left">14</td>
+</tr>
+<tr>
+<td style="text-align:left">内存</td>
+<td style="text-align:left">250</td>
+</tr>
+<tr>
+<td style="text-align:left">硬盘</td>
+<td style="text-align:left">41000000</td>
+</tr>
+<tr>
+<td style="text-align:left">网络</td>
+<td style="text-align:left">240000000</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>到这里，有一个很有意思的问题，假如我们访问的是 127.0.0.1 那么时钟周期是在什么级别？</p>
+</blockquote>
+<hr>
+<h2 id="API功能单一化（降低API粒度）"><a href="#API功能单一化（降低API粒度）" class="headerlink" title="API功能单一化（降低API粒度）"></a>API功能单一化（降低API粒度）</h2><p>一个函数所做的事情越多，那么它出错的概率就越大。<br>比如发送操作，最基础的版本是这样的<br><code>1) 获取要发送的用户</code> -&gt; <code>2) 匹配文案</code> -&gt; <code>3) 调用第三方推送服务</code><br>但是有一天，产品告诉你，有用户收不到，所以你加了个重试<br><code>1) 获取要发送的用用户</code> -&gt; <code>2) 匹配文案</code> -&gt; <code>3) 调用第三方推送服务</code> -&gt; <code>4) 判断返回，失败重试</code><br>平稳了一段时间，后来接入的业务多了，发现超过第三方推送服务的频率限制了，于是在（3）处加了个延时，似乎曲线救国了。<br>后来，运营来了，我有一个n万的名单要发。。。结果。。。<br>事实上，真实的推送，比这复杂得多。还得考虑app版本，用户推送设置，多app的证书问题，第三方接口频率限制问题，任务定时，错误怎么处理等~~~</p>
+<p>我们无法保证程序是100%可靠的，所以要想办法降低出错后的成本。一个思路是，单个函数只做一件事，单个函数只处理单个任务，不做批量处理，通过并发实现产能的提高（提高并发，其实就是水平拓展）。  </p>
+<p>比如拆分后的发送模型<br><img src="http://image-2.plusman.cn/image/push-send-model.png" alt="发送模型"><br>现在的频率限制可以放在右侧的消费 worker 上。<br>实际测试中，最后的推送操作事故率是最高的，而任务添加的操作，相比而言是轻量的，通过 Watcher 隔离后，尽量保证业务方的不受影响。</p>
+<p>worker 消费任务的时候，每次只取一条，发生未知错误后，worker 会终止运行，这时候需要人工介入。这样做，即使 worker 挂了，大多数任务还在任务池，没有随着内存烟消云散了，排查完错误后，还有得救。</p>
+<p>那么定时任务如何实现呢，本着功能单一的原则，不会往发送模型上去加。<br><img src="http://image-2.plusman.cn/image/push-schedule-model.png" alt="任务模型"><br>订阅列表的出现，是为了解决群发时用户状态遍历耗时的瓶颈。</p>
+<p>在这次重构中，API功能单一化，除了降低了出错后的损失外，还为后期的拓展带来了可能性，比如把一个消费worker变成一台机器，就可以实现集群了。</p>
+<hr>
+<h2 id="为什么需要Worker"><a href="#为什么需要Worker" class="headerlink" title="为什么需要Worker"></a>为什么需要Worker</h2><p>node 从0.8开始，引入了 cluster 模块，程序员可以借此轻松的创建多进程应用，搭建单机集群。多进程架构除了能够更加高效的利用CPU资源外，还能更好的保证服务可用性。<br>对于web服务，我们经常通过 cluster 开启一个主进程和多个子 worker，每个 worker 都拥有完整的功能，然后通过端口复用实现负载均衡。<br>由于各个 worker 之间是相互独立的，所以只要主进程没挂，且至少有一个子worker存活，就可以继续提供服务。<br>更进一步的做法是，针对每个web api起独立的worker，该worker仅拥有该web api需要的功能，这种更加精细化的操作，就要用到 node 的 <code>child_process</code> 模块了,但是 node 官方文档里面有这么一句  </p>
+<blockquote>
+<p>These child Node.js processes are still whole new instances of V8. Assume at least 30ms startup and 10mb memory for each new Node.js. That is, you cannot create many thousands of them.</p>
+</blockquote>
+<p>所以，这是把双刃剑，一旦 worker 数目失控，不能有效的回收，那就机毁人亡了。  </p>
+<hr>
+<h2 id="Worker-管理"><a href="#Worker-管理" class="headerlink" title="Worker 管理"></a>Worker 管理</h2><p>本来想写在这里，发现没有示例，容易变成说明书，<br>打算配合示例，另起一篇，打算说说</p>
+<ul>
+<li>worker 启动和回收</li>
+<li>worker 之间的通信</li>
+<li>worker 之间的隔离</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node性能优化/" rel="tag">#node性能优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/05/b3-node性能优化-API响应时间监测/" rel="next" title="(node性能优化一) API响应时间监测">
+                <i class="fa fa-chevron-left"></i> (node性能优化一) API响应时间监测
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/23/n1-note-semver/" rel="prev" title="[note][翻译] 如何正确的命名软件版本号">
+                [note][翻译] 如何正确的命名软件版本号 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/11/b4-mini-unit/"
+           data-title="(node性能优化二) API粒度实践" data-url="http://yoursite.com/2016/01/11/b4-mini-unit/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/4994682?v=3&s=460"
+               alt="plusman" />
+          <p class="site-author-name" itemprop="name">plusman</p>
+          <p class="site-description motion-element" itemprop="description">Noder，励志伪全栈</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/plusmancn" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/plusmancn" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/liu-jia-nan-90" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              传送门
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://xtutu.me/" title="Xtutu" target="_blank">Xtutu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O-角度上的WEB-API粒度"><span class="nav-number">1.</span> <span class="nav-text">I/O 角度上的WEB API粒度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API功能单一化（降低API粒度）"><span class="nav-number">2.</span> <span class="nav-text">API功能单一化（降低API粒度）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要Worker"><span class="nav-number">3.</span> <span class="nav-text">为什么需要Worker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker-管理"><span class="nav-number">4.</span> <span class="nav-text">Worker 管理</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">plusman</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"plusman"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
