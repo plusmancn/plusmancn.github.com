@@ -19,14 +19,14 @@ const debug = require('debug')('generate-index');
 debug('Starting......');
 
 let notes = []
-    .concat(extractNoteMeta('./2016'))
-    .concat(extractNoteMeta('./2017'))
+    .concat(extractNoteMeta('2016'))
+    .concat(extractNoteMeta('2017'))
     .reverse();
 
 let html = ejs.render(
     '<ul>\n' +
     '<% notes.forEach(function(note){ %>' +
-        '<li><%=note.title %></li>\n'+
+    '  <li><a href="<%-note.link%>"><%=note.title %></a></li>\n'+
     '<% }) %>'+
     '</ul>', {
         notes: notes
@@ -62,7 +62,10 @@ function extractNoteMeta (dir) {
         });
         let start = content.indexOf('\n');
         let end = content.indexOf('---\n', start);
-        return yaml.safeLoad(content.slice(start + 1, end));
+        let meta = yaml.safeLoad(content.slice(start + 1, end));
+        // 补充路劲信息
+        meta.link = `https://github.com/plusmancn/plusmancn.github.com/blob/master/${dir}/${item}`;
+        return meta;
     });
     
     debug(`parse ${dir} finished`);
