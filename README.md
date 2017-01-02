@@ -6,7 +6,7 @@
 <!-- index -->
 <ul>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B2-optimize-mysql-index.md">mysql 查询性能优化总结</a></li>
-  <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/B1-note-semver.md">[note][翻译] 如何正确的命名软件版本号</a></li>
+  <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/B1-note-semver.md">[翻译] 如何正确的命名软件版本号</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/A9-npm-assistor.md">npm-assistor, npm 包初始化和 git tag 辅助工具</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/A8-log-elk.md">日志规范化与分析监控</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/A7-error-catch.md">callback 和 promise 的错误捕获</a></li>
