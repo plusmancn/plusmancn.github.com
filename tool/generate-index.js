@@ -6,7 +6,9 @@
  * reserved.
  *
  * 生成目录文件
- * 替换 {{index}} 标记部分
+ * 替换如下标记部分
+ * <!-- index -->
+ * <!-- indexEnd -->
  */
 
 const fs = require('fs');

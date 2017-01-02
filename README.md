@@ -1,7 +1,8 @@
 # 我的手记
 > 越长大，就越想回归写作本身，对各种独立博客系统，越来越懒得折腾。所以，现在给我个能解析 markdown 的空间，一个 vim，一个简简单单的文章目录就够了。  
 
-推荐使用 [octotree](https://github.com/buunguyen/octotree) 浏览项目。  
+推荐使用 [octotree](https://github.com/buunguyen/octotree) 浏览项目。
+
 ## 目录
 <!-- index -->
 <ul>
