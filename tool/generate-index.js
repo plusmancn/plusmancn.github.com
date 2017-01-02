@@ -11,7 +11,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const _ = require('lodash');
 const yaml = require('js-yaml');
 const ejs = require('ejs');
 const debug = require('debug')('generate-index');
@@ -28,24 +27,32 @@ let html = ejs.render(
     '<% notes.forEach(function(note){ %>' +
     '  <li><a href="<%-note.link%>"><%=note.title %></a></li>\n'+
     '<% }) %>'+
-    '</ul>', {
+    '</ul>\n', {
         notes: notes
     });
 
-replaceIndexMark('./index.html', '{{index}}', html);
-replaceIndexMark('./README.md', '{{index}}', html);
+replaceIndexMark('./index.html', html);
+replaceIndexMark('./README.md', html);
 
 /**
  * 替换标识内容
  * @param {String} filename - 文件路径
- * @param {String} marker - 需要替换的模板
  * @param {String} html - 替换内容
  */
-function replaceIndexMark (filename, marker, html) {
+function replaceIndexMark (filename, html) {
     let content = fs.readFileSync(filename, {
         encoding: 'utf8'
     });
-    fs.writeFileSync(filename, content.replace(marker, html));
+    let start = content.indexOf('<!-- index -->\n');
+    let end = content.indexOf('<!-- indexEnd -->');
+
+    fs.writeFileSync(
+        filename,
+        content.replace(
+            content.slice(start, end),
+            '<!-- index -->\n' + html
+        )
+    );
     debug(`replace marker in ${filename}`);
 }
 
@@ -55,7 +62,7 @@ function replaceIndexMark (filename, marker, html) {
  * @return {Array}
  */
 function extractNoteMeta (dir) {
-    let noteList = fs.readdirSync(dir).filter(item => _.endsWith(item, '.md'));
+    let noteList = fs.readdirSync(dir).filter(item => item.endsWith('.md'));
     let noteMetaList = noteList.map(function (item) {
         let content = fs.readFileSync(path.join(dir, item), {
             encoding: 'utf8'
