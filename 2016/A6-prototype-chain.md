@@ -5,9 +5,6 @@ tags:
 - js
 ---
 
-> Written with [vim](http://www.vim.org/)
-
----
 > 疑惑来自对Error对象的继承
 
 某段业务代码里面的错误定义形式

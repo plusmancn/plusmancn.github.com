@@ -5,9 +5,6 @@ tags:
 - 'node性能优化'
 ---
 
-> Written with [vim](http://www.vim.org/)
-
----
 ![simple vs complex](http://image-2.plusman.cn/image/wpid-Photo-Apr-4-2013-105-PM.jpg)
 
 >把复杂拆分成简单，将简单组合成强大，再用强大去解决复杂。`--` Unix的设计思想之一

@@ -1,0 +1,28 @@
+{
+  "name": "plusmancn.github.com",
+  "version": "1.0.0",
+  "description": "plusmanの手记",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plusmancn/plusmancn.github.com.git"
+  },
+  "keywords": [
+    "手记"
+  ],
+  "author": "plusmancn@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plusmancn/plusmancn.github.com/issues"
+  },
+  "homepage": "https://github.com/plusmancn/plusmancn.github.com#readme",
+  "devDependencies": {
+    "debug": "^2.6.0",
+    "ejs": "^2.5.5",
+    "js-yaml": "^3.7.0",
+    "lodash": "^4.17.4"
+  }
+}

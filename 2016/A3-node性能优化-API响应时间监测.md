@@ -5,9 +5,6 @@ tags:
 - 'node性能优化'
 ---
 
-> Written with [vim](http://www.vim.org/)
-
----
 ![cheniu-api-time-line.png](http://image-2.plusman.cn/image/cheniu-api-time-line.png)
 古语：“知己知彼，百战不殆”，面对性能优化，哪怕不求百战不殆，也求“死得明白”，所以在尝试进行系统性能优化之前，先得了解系统的性能瓶颈在哪，不至于使不上劲。
 
