@@ -4,7 +4,8 @@
   "description": "plusmanの手记",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-index": "node tool/generate-index.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,10 @@
     "debug": "^2.6.0",
     "ejs": "^2.5.5",
     "js-yaml": "^3.7.0",
-    "lodash": "^4.17.4"
-  }
+    "lodash": "^4.17.4",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "generate-index"
+  ]
 }
