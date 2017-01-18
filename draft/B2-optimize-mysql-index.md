@@ -20,6 +20,7 @@ tags:
 
 ## 缓存设计
 
+
 * 区分度
 * 最左匹配特性
 * unique 的效率是不是比 index 要高，primary 呢
