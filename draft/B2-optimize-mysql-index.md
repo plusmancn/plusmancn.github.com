@@ -3,10 +3,18 @@ title: 'mysql 查询性能优化总结'
 date: '2016-09-29 14:28:13'
 tags:
 - 'mysql'
-- 'node'
 ---
 
-作为一个 node 去研究 mysql，似乎有些跑偏了，后来想想，没必要给自己定界，能折腾，说明我还没老。
+
+## 存储引擎抉择
+
+## 表设计
+
+## 索引设计
+
+## 查询优化
+
+## 缓存设计
 
 * 区分度
 * 最左匹配特性
@@ -68,7 +76,6 @@ InnoDB
 [MySQL 5.7 Reference Manual Data Type Overview](http://dev.mysql.com/doc/refman/5.7/en/data-type-overview.html)
 * text 长度限制
 * varchar 长度限制
-
 
 ## 参考资料
 * [美团点评技术团队：MySQL索引原理及慢查询优化](http://tech.meituan.com/mysql-index.html) PS: 不赞同在业务中使用如此复杂的SQL语句  
