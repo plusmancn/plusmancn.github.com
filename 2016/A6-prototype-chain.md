@@ -6,7 +6,6 @@ tags:
 - js
 - es6
 ---
-
 > 疑惑来自对Error对象的继承
 
 某段业务代码里面的错误定义形式
@@ -140,4 +139,19 @@ myObject.stack  // similar to `new Error().stack`
 
 > 所以，如果需要保留错误栈，文章开头那段，Error.captureStackTrace 还是需要保留的。
 
+(2017年01月18日11:34:52 补充):  
+如果利用 ES6 的继承方式，那么不需要再调用 `captureStackTrace` 也能获取到错误堆栈，如此，错误栈首行不再是无用信息，写法如下
+```javaScript
+class HttpError extends Error {
+    constructor(message, code, name) {
+        super(message);
+        this.status = code || 500;
+        this.name = name || this.constructor.name;
+    }
 
+    // 可以利用 static 方法，抛出指定类型错误，做统一输出处理
+    static badParameter (message) {
+        return new HttpError(message, 400, 'BadParameter');
+    }
+}
+```
