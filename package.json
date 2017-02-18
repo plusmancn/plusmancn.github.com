@@ -4,6 +4,7 @@
   "description": "plusmanの手记",
   "main": "index.js",
   "scripts": {
+    "generate": "DEBUG=generate-index node tool/generate-index.js",
     "publish": "DEBUG=generate-index node tool/generate-index.js && git commit -a && git push"
   },
   "repository": {
