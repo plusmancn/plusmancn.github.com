@@ -49,9 +49,34 @@ tags:
 事实上，`TabBar` 内部的元素，将作为 `props.children` 变量传入 `TabBar`，假如 `TabBar` 内部的 `render` 函数不将 `props.children` 做解析渲染，那么它将永远只是个变量，没有实例化和挂载渲染的机会。  
 这段初始化代码里，真正被挂载的组件只有 `TabBar` 一个，基于此，我们将通过控制 `TabBar` 的 `render` 函数，来实现 `TabBar.Item` 的懒加载。  
 
+`TabBar` 的 `render` 函数返回如下结构
+```javascript
+render() {
+    return (
+        ...
+        <View>
+            {scenes} // 屏幕主视图
+            <View
+                // 底部切换主屏幕用控制条
+            />
+        </View>
+        ...
+    );
+}
+```
+这里的 `scenes` 是一个组件 (`MainScreen`) 数组，里面可能会包含多个实例组件，通过 `absolute` 的方式定位，相互覆盖，但是同一时刻，只有一个组件是可见且能够接收处理用户事件，其余组件通过 `style.opacity` 和  `pointerEvents=none` 来实现隐藏和事件静默。  
+只有 `MainScreen` 进入了 `scenes` 数组才会被挂载，所以，我们添加进入数组的条件为，`MainScreen` 对应的 `Tab` 被点击后才能进入数组，即可实现懒加载。
+
+### 视图缓存
+理解了懒加载，视图缓存就很简单了。  
+如果某个 `MainScreen` 一直在 `scenes` 数组里，那么只要 `TabBar` 组件不被销毁，就不会触发 `MainScreen` 的 `unMount`（卸载）事件。  
+所以我们更改进入数组的条件为：对应 `Tab` 被首次点击 或者 已经被点击过，即可实现视图缓存。
 
 
+## 效果图
+假装这里有一张图片。  
 
+下篇文章将介绍 `Navigator` 导航的实现，以及和 `TabBar` 的交互方式。
 
 ## 参考
 [组件的生命周期](https://facebook.github.io/react/docs/react-component.html#componentwillreceiveprops)
