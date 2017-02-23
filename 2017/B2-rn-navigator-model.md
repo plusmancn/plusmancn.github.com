@@ -14,9 +14,15 @@ tags:
 微信的导航模式主要有：首页底部的横向 TabBar 导航 +  纵向的 Navigator 弹出式导航  
 我们先来实现 TabBar 导航。
 
-## 底部 TabBar 实现
+
+## TabBar 组件内元素关系
 > 具体实现参照：[UiLibrary/TabBar](https://github.com/plusmancn/im-client/tree/master/UiLibrary/TabBar)  
 
+TabBarItem 类似于参数容易，本身在 UI 中并无样式体现。
+![元素关系图](../images/im-client-TabBar.png)
+
+
+## 关键特性实现
 先来约定下我们要实现的目标：  
 * 懒加载：只有 Tab 被点击后，才会进行首次渲染。
 * 视图缓存：第二次切换到视图的时候，不会重新渲染
@@ -71,10 +77,6 @@ render() {
 理解了懒加载，视图缓存就很简单了。  
 如果某个 `MainScreen` 一直在 `scenes` 数组里，那么只要 `TabBar` 组件不被销毁，就不会触发 `MainScreen` 的 `unMount`（卸载）事件。  
 所以我们更改进入数组的条件为：对应 `Tab` 被首次点击 或者 已经被点击过，即可实现视图缓存。
-
-
-## 效果图
-假装这里有一张图片。  
 
 下篇文章将介绍 `Navigator` 导航的实现，以及和 `TabBar` 的交互方式。
 
