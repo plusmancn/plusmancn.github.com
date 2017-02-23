@@ -19,7 +19,8 @@ tags:
 > 具体实现参照：[UiLibrary/TabBar](https://github.com/plusmancn/im-client/tree/master/UiLibrary/TabBar)  
 
 TabBarItem 类似于参数容易，本身在 UI 中并无样式体现。
-![元素关系图](../images/im-client-TabBar.png)
+
+<img src="../images/im-client-TabBar.png" height="500"/>
 
 
 ## 关键特性实现
