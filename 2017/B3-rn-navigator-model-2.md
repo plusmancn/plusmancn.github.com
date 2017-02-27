@@ -15,3 +15,12 @@ tags:
 1. 视图切换效果问题
 2. navBar 通讯问题
 3. 是否需要使用 navigator experimental
+4. 视图两次渲染问题，onTransmition End
+5. component 和 element 的概念，所以缓存还是可以通过单例来解决。
+
+变量的生命周期 和 组件的生命周期 是不同的概念
+真正的缓存概念~~
+
+
+## 参考
+[Higher-Order Components](https://facebook.github.io/react/docs/higher-order-components.html)  
