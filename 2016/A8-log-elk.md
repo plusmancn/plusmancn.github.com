@@ -6,7 +6,8 @@ tags:
 - 'node'
 ---
 
-![系统概览](http://image-2.plusman.cn/image/elk-souche-alert-v1.0.png)
+![系统概览](../images/elk-souche-alert-v1.0.png)
+
 ## 原由
 今天7月10号，到8月10号，正好来搜车前端一年。  
 刚来这时，还是个 Noder 新手，当然现在也是。那时面对百万行数量级的代码，一旦出个问题又没有错误栈，简直就是梦魇~。当面对线上 bug 时，便是这种窘境，然后本地测试下来，却又是好的，抓狂。  
@@ -168,9 +169,9 @@ Elastic 公司有 [watcher](https://www.elastic.co/products/watcher) 的商用�
 ```javascript
 const bylog = require('../');
 // 终端输出格式化，做了 node xxx.js | bunyan 的事
-const logOutput = require('../lib/log_output.js'); 
+const logOutput = require('../lib/log_output.js');
 
-// 支持 bunyan (https://github.com/trentm/node-bunyan) 所有参数 
+// 支持 bunyan (https://github.com/trentm/node-bunyan) 所有参数
 let logOpt = {
     name: 'cheniu-pro',
     src: false,

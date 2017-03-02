@@ -1,5 +1,5 @@
 ---
-title: '《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航'
+title: '[working]《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航'
 date: '2017-02-24 00:18:32'
 tags:
 - '从零开始搭建一个多端 IM'
@@ -20,6 +20,9 @@ tags:
 
 变量的生命周期 和 组件的生命周期 是不同的概念
 真正的缓存概念~~
+
+
+http://facebook.github.io/react-native/releases/0.41/docs/backandroid.html
 
 
 ## 参考
