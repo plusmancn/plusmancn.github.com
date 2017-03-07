@@ -6,7 +6,7 @@
 ## 目录
 <!-- index -->
 <ul>
-  <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B3-rn-navigator-model-2.md">[working]《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航</a></li>
+  <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B3-rn-navigator-model-2.md">《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B2-rn-navigator-model-1.md">《从零开始搭建一个多端 IM》壹：页面导航模式设计- TabBar 导航栏</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/B1-note-semver.md">[翻译] 如何正确的命名软件版本号</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/A9-npm-assistor.md">npm-assistor, npm 包初始化和 git tag 辅助工具</a></li>
