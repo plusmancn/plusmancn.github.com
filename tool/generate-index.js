@@ -76,7 +76,7 @@ function extractNoteMeta (dir) {
         meta.link = `https://github.com/plusmancn/plusmancn.github.com/blob/master/${dir}/${item}`;
         return meta;
     });
-    
+
     debug(`parse ${dir} finished`);
     return noteMetaList;
 }

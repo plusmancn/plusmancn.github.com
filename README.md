@@ -6,6 +6,7 @@
 ## 目录
 <!-- index -->
 <ul>
+  <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B5-float-number.md">剖析 JS 内 0.1 + 0.2 = 0.30000000000000004 计算失精问题</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B3-rn-navigator-model-2.md">《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2017/B2-rn-navigator-model-1.md">《从零开始搭建一个多端 IM》壹：页面导航模式设计- TabBar 导航栏</a></li>
   <li><a href="https://github.com/plusmancn/plusmancn.github.com/blob/master/2016/B1-note-semver.md">[翻译] 如何正确的命名软件版本号</a></li>
