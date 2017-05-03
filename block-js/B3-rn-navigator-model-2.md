@@ -7,7 +7,7 @@ tags:
 - 'react-native'
 ---
 
-> 具体实现参照：[UiLibrary/Navigator](https://github.com/plusmancn/im-client/tree/master/UiLibrary/Navigator)
+> 具体实现参照：[UiLibrary/Navigator](https://github.com/im-js/im.js/tree/master/UiLibrary/Navigator)
 
 **标示图**  
 <img src="../images/im-client-Navigator.png" height="500"/>

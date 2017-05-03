@@ -5,7 +5,7 @@ tags:
 - 'js'
 ---
 
-![ctp](http://image-2.plusman.cn/image/callbacks_promises.png?imageView2/2/w/920/interlace/0/q/100)
+![ctp](../images/callbacks_promises.png?imageView2/2/w/920/interlace/0/q/100)
 > 1) 千万不要去尝试 catch callback 的回调错误，错误处理应交由 callbac 函数本身。开发中碰到过框架捕获了 callback 的错误，而且直接湮没了，导致代码出了问题，却不能察觉。  
 2)  对于进程的 uncaughtException, unhandledRejection 事件，建议结合日志做一些监听处理。
 
@@ -74,7 +74,7 @@ Catch in process [Error: Error from cbAfter3s ASync]
 // 内置P romise
 var p = (new Promise(function(resolve, reject){
     reject(new Error('Error from promise by reject'));
-    // 或者通过 throw 的方式抛出，效果相同 
+    // 或者通过 throw 的方式抛出，效果相同
     // throw new Error('Error from promise by throw');
 
 }));
@@ -93,7 +93,7 @@ var p = (new Promise(function(resolve){
 process.on('uncaughtException', function(e){
     console.error('UE:Catch in process', e);
 });
- 
+
 process.on('unhandledRejection', (reason) => {
     console.info('UR:Catch in process', reason);
 });

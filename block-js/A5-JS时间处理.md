@@ -10,8 +10,8 @@ tags:
 天朝的北京时间（东8区），如果上面的时间表示为北京时间的话 `2015-06-05T20:33:51.012+0800`。
 注意上面关键词是转换，上面两个时间是同一个时间的不同表述方法而已。
 Ps:
-因为地球是自西向东转的，所以我们比西边的人，早看到太阳，所以要+0800 （地理：读者视角，看地图，上北下南左西右东）
-![地球转向，自西向东](http://7xnts0.dl1.z0.glb.clouddn.com/445158-b53bcbcb2f0ff4f8.jpg)
+因为地球是自西向东转的，所以我们比西边的人，早看到太阳，所以要+0800 （地理：读者视角，看地图，上北下南左西右东）  
+![地球转向，自西向东](../images/445158-b53bcbcb2f0ff4f8.jpg)
 
 ---
 
@@ -56,17 +56,17 @@ new Date().toISOString(); //获取当前时间
 参考了网上现有的[JS日期时间格式][6]函数，综合性能和易用性，采用拓展原生Date prototype，添加format方法，添加格式化参数引号内字符串不解析特性，示例如下。
 ```javascript
 'use strict'
-/** 
- * 对日期进行格式化， 
- * @param date 要格式化的日期 
+/**
+ * 对日期进行格式化，
+ * @param date 要格式化的日期
  * @param format 进行格式化的模式字符串
- *     支持的模式字母有： 
- *     y:年, 
- *     M:年中的月份(1-12), 
- *     d:月份中的天(1-31), 
- *     H:小时(0-23), 
- *     m:分(0-59), 
- *     s:秒(0-59), 
+ *     支持的模式字母有：
+ *     y:年,
+ *     M:年中的月份(1-12),
+ *     d:月份中的天(1-31),
+ *     H:小时(0-23),
+ *     m:分(0-59),
+ *     s:秒(0-59),
  *     S:毫秒(0-999),
  *     q:季度(1-4)
  * @return String
@@ -76,7 +76,7 @@ new Date().toISOString(); //获取当前时间
  *  new Date().format('yyyy-MM-dd HH:mm:ss "season" q'); // 2015-06-07 11:mm:17 season 2
  *  new Date().format("yyyy-MM-dd HH:mm:ss 'season' q"); // 2015-06-07 11:mm:17 season 2
  *  new Date().format('yyyy-MM-dd HH:mm:ss 季度：q'); // 2015-06-07 11:mm:17 季度：2
- *  new Date().format('yyyy-MM-dd HH:mm:ss "季度："q'); //2015-06-07 11:mm:17 02 
+ *  new Date().format('yyyy-MM-dd HH:mm:ss "季度："q'); //2015-06-07 11:mm:17 02
  *  // 存在Bug，不能在内部引号后紧跟标识符，中文可以通过第三个示例解决，英文单词间一般都有空格，所以影响不大。
  */
 
@@ -107,7 +107,7 @@ Date.prototype.format = function(fmt) {
 ---
 ## 奇异的特性
 ###  12:00 PM 还是 1:00 PM 哪个时间大
-事实总是不是你看到的这样，js做了取余操作，12 % 12 =0 
+事实总是不是你看到的这样，js做了取余操作，12 % 12 =0
 ```javascript
 'use strict'
 console.log(new Date('1/12/2015, 12:00:00 PM').getTime() - new Date('1/12/2015, 1:00:00 PM').getTime()); // output  -3600000

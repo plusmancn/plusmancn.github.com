@@ -153,3 +153,6 @@ fabric.properties
 !.vscode/extensions.json
 
 # End of https://www.gitignore.io/api/osx,vim,node,webstorm,visualstudiocode
+
+
+_book/

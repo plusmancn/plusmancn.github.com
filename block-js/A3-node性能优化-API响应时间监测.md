@@ -5,7 +5,7 @@ tags:
 - 'node性能优化'
 ---
 
-![cheniu-api-time-line.png](http://image-2.plusman.cn/image/cheniu-api-time-line.png)
+![cheniu-api-time-line.png](../images/cheniu-api-time-line.png)
 古语：“知己知彼，百战不殆”，面对性能优化，哪怕不求百战不殆，也求“死得明白”，所以在尝试进行系统性能优化之前，先得了解系统的性能瓶颈在哪，不至于使不上劲。
 
 > 我不生产知识，只是知识的搬运工，都是团队实践的总结。
@@ -156,5 +156,3 @@ sudo service grafana-server start
 接下来
 * 针对外部服务的性能消耗统计
 * 整理一些 Grafana 针对 InfluxDB 的常用统计语句
-
-

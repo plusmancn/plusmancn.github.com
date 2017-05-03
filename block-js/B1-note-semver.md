@@ -6,7 +6,7 @@ tags:
 - '翻译'
 ---
 
-![SemVer](http://image-2.plusman.cn/image/semver-v2.jpg)
+![SemVer](../images/semver-v2.jpg)
 [图解] [Caret Ranges ^1.2.3 ^0.2.5 ^0.0.4](https://www.npmjs.com/package/semver#caret-ranges-123-025-004) 。`^` 符号，是不允许改变最左非零数字，1.x.x 系列见得最多，容易形成误解。正确的升级规则如下：
 ```
 * ^1.2.3 := >=1.2.3 <2.0.0

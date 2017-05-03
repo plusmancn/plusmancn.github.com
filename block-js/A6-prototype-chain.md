@@ -60,7 +60,7 @@ ctor.prototype = Object.create(superCtor.prototype, {
 ```
 
 ctor是Stream对象，superCtor是EE对象，操作完成后，Stream的原型链呈现如下关系
-![继承-原型链关系图.png](http://7xnts0.dl1.z0.glb.clouddn.com/image/继承-原型链关系图-v1.png)
+![继承-原型链关系图.png](../images/继承-原型链关系图-v1.png)
 
 结合原型链向上搜索的特性，Stream模块可以通过`__proto__`指针访问到EventEmitter.prototype上的方法，如果对象的`__proto__`指针为null，则停止搜索。
 `Object.prototype.__proto__` 指针为null，Object是JS中所有对象类型的源头。
@@ -77,14 +77,14 @@ ctor.prototype = Object.create(superCtor.prototype);
 // ctor.prototype.constructor = ctor; // 假如我们注释了这步
 ```
 再看下原型链图（注释了 ctor.prototype.constructor = ctor），[测试代码](https://jsfiddle.net/plusman/gdeake7c/39/)
-![Object.create-原型链继承](http://7xnts0.dl1.z0.glb.clouddn.com/image/Object.create-原型链继承.png)
+![Object.create-原型链继承](../images/Object.create-原型链继承.png)
 
 另外一种写法
 ```
 ctor.prototype = new superCtor();
 ```
 对应的原型链图 [测试代码](https://jsfiddle.net/plusman/gdeake7c/40/)
-![new-原型链继承](http://7xnts0.dl1.z0.glb.clouddn.com/image/new-原型链继承.png)
+![new-原型链继承](../images/new-原型链继承.png)
 
 > 几种方式`__proto__`最后的指向都相同，但是后两种方法Stream对象的constructor发生了变化，这里碰到了一个问题，假如Stream的constructor指向自己，那么EventEmitter构造函数的方法将丢失，如何既保留Stram的构造函数方法，又拥有父类的构造函数方法，就牵涉到继承的另一个层面，构造函数方法的继承。
 

@@ -7,7 +7,6 @@ tags:
 - 'react-native'
 ---
 
-# 壹：APP页面导航模式设计
 >这是个系列文章，名叫《从零开始搭建一个多端 IM》，将介绍如何利用 `react`, `react-native`, `socket.io`, `NodeJs` 搭建一个跨 `iOS`,`Android`,`web` 三端的 IM 应用，由于我也是初学 RN，难免会有很多理解错误的地方，还请大家多多指正和包涵。
 
 由于没有设计师 MM 支援，所以我们的界面就选择模仿微信啦。  
@@ -16,7 +15,7 @@ tags:
 
 
 ## TabBar 组件内元素关系
-> 具体实现参照：[UiLibrary/TabBar](https://github.com/plusmancn/im-client/tree/master/UiLibrary/TabBar)  
+> 具体实现参照：[UiLibrary/TabBar](https://github.com/im-js/im.js/tree/master/UiLibrary/TabBar)  
 
 TabBarItem 类似于参数容易，本身在 UI 中并无样式体现。
 

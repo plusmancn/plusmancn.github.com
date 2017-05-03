@@ -5,7 +5,7 @@ tags:
 - 'node性能优化'
 ---
 
-![simple vs complex](http://image-2.plusman.cn/image/wpid-Photo-Apr-4-2013-105-PM.jpg)
+![simple vs complex](../images/wpid-Photo-Apr-4-2013-105-PM.jpg)
 
 >把复杂拆分成简单，将简单组合成强大，再用强大去解决复杂。`--` Unix的设计思想之一
 
@@ -51,14 +51,14 @@ tags:
 我们无法保证程序是100%可靠的，所以要想办法降低出错后的成本。一个思路是，单个函数只做一件事，单个函数只处理单个任务，不做批量处理，通过并发实现产能的提高（提高并发，其实就是水平拓展）。  
 
 比如拆分后的发送模型
-![发送模型](http://image-2.plusman.cn/image/push-send-model.png)
+![发送模型](../images/push-send-model.png)
 现在的频率限制可以放在右侧的消费 worker 上。  
 实际测试中，最后的推送操作事故率是最高的，而任务添加的操作，相比而言是轻量的，通过 Watcher 隔离后，尽量保证业务方的不受影响。
 
 worker 消费任务的时候，每次只取一条，发生未知错误后，worker 会终止运行，这时候需要人工介入。这样做，即使 worker 挂了，大多数任务还在任务池，没有随着内存烟消云散了，排查完错误后，还有得救。
 
 那么定时任务如何实现呢，本着功能单一的原则，不会往发送模型上去加。
-![任务模型](http://image-2.plusman.cn/image/push-schedule-model.png)
+![任务模型](../images/push-schedule-model.png)
 订阅列表的出现，是为了解决群发时用户状态遍历耗时的瓶颈。
 
 在这次重构中，API功能单一化，除了降低了出错后的损失外，还为后期的拓展带来了可能性，比如把一个消费worker变成一台机器，就可以实现集群了。

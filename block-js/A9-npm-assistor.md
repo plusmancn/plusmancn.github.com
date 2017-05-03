@@ -21,13 +21,13 @@ npm-assistor
 弹出如下选择界面  
 ```shell
 ? 选择要执行的命令 (Use arrow keys)
-  ❯ init (用于 npm 包初始化，请在 npm init 后执行) 
+  ❯ init (用于 npm 包初始化，请在 npm init 后执行)
     tag (用于发布前 master 分支的 tag 标记)
 ```
 **选择 init 后的交互（Gif)**  
-![npm-assistor-init](http://image-2.plusman.cn/image/npm-assistor-init.gif)
+![npm-assistor-init](../images/npm-assistor-init.gif)
 **选择 tag 后的交互（Gif)**  
-![npm-assistor-tag](http://image-2.plusman.cn/image/npm-assistor-tag.gif)
+![npm-assistor-tag](../images/npm-assistor-tag.gif)
 
 <!-- more -->
 
@@ -48,7 +48,7 @@ templates:
         # - https://github.com/yourname/yourself-tempalte.git
     # Todo 最好支持下 gitlab，实现内网服务
     # gitlab:
-        # - 
+        # -
 ################## gitignore 服务器地址 #########################
 #  项目地址: https://github.com/joeblau/gitignore.io
 #  土豪大大们，可以选择在国内部署一份，屌丝只用得起国外便宜货
@@ -62,7 +62,7 @@ gitignore_server: http://gitignore.plusman.cn:8000
 **LICENSE（未做集成）**  
 [licenses list by name]( https://opensource.org/licenses/alphabetical )  
 并未做成命令行，具体可以参考，源码 `licenses-files` 文件夹，内含思维导图 xmind 格式  
-![popular-license](http://image-2.plusman.cn/image/popular-license.png)
+![popular-license](../images/popular-license.png)
 
 ## Tag 说明
 **Tag说明**  
@@ -97,7 +97,7 @@ moment.locale('zh-cn', {
 
 **GitFlow 流程**  
 附上团队内部修改过的GitFlow 流程。[a-successful-git-branching-model/](http://nvie.com/posts/a-successful-git-branching-model/) 原博客结尾有 keynote 源码哈，可以在这基础上改出适合自己团队的 GitFlow
-![GitFlowV2 Of souche](http://image-2.plusman.cn/image/GitFlowV2.jpg)
+![GitFlowV2 Of souche](../images/GitFlowV2.jpg)
 
 ## About
 Have Fun!
