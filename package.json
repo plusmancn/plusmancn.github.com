@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "generate": "DEBUG=generate-index node tool/generate-index.js",
-    "publish": "DEBUG=generate-index node tool/generate-index.js && git commit -a && git push"
+    "publish": "DEBUG=generate-index node tool/generate-index.js && git commit -a && git push",
+    "webhook": "./node_modules/.bin/github-webhook --config=.webhook.json"
   },
   "repository": {
     "type": "git",
@@ -21,9 +22,6 @@
   },
   "homepage": "https://github.com/plusmancn/plusmancn.github.com#readme",
   "devDependencies": {
-    "debug": "^2.6.0",
-    "ejs": "^2.5.5",
-    "js-yaml": "^3.7.0",
-    "lodash": "^4.17.4"
+    "github-webhook": "^1.1.3"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "port": 9001,
+  "path": "/gitbook/webhook",
+  "secret": "5a65b854e8930ee0537f12a2fc025f30",
+  "log": "./.webhook.log",
+  "rules": [
+      {
+        "event": "push",
+        "match": "ref == \"refs/heads/master\" && repository.name == \"plusmancn.github.com\"",
+        "exec": "echo yay!"
+      }
+  ]
+}
