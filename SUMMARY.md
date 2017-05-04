@@ -1,8 +1,8 @@
 # Summary
-## part1
-* [简介](README.md)
+## About
+* [关于我](README.md)
 
-## part2
+## Main
 * [JavaScript](./block-js/README.md)
   * [RN 导航 Navigator 组件](./block-js/B3-rn-navigator-model-2.md)
   * [RN 导航 TabBar 组件](./block-js/B2-rn-navigator-model-1.md)
