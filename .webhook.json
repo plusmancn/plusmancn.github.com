@@ -7,7 +7,7 @@
       {
         "event": "push",
         "match": "ref == \"refs/heads/master\" && repository.name == \"plusmancn.github.com\"",
-        "exec": "echo yay!"
+        "exec": "echo yay! m"
       }
   ]
 }
