@@ -6,7 +6,7 @@
   "scripts": {
     "generate": "DEBUG=generate-index node tool/generate-index.js",
     "publish": "DEBUG=generate-index node tool/generate-index.js && git commit -a && git push",
-    "webhook": "./node_modules/.bin/github-webhook --config=.webhook.json"
+    "webhook": "DEBUG=* ./node_modules/.bin/github-webhook --config=.webhook.json"
   },
   "repository": {
     "type": "git",
