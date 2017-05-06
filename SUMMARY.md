@@ -1,6 +1,6 @@
 # Summary
 ## About
-* [关于我](README.md)
+* [简介](README.md)
 
 ## Main
 * [JavaScript](./block-js/README.md)
@@ -15,7 +15,7 @@
   * [API 粒度设计](./block-js/A4-mini-unit.md)
   * [API 响应时间监测](./block-js/A3-node性能优化-API响应时间监测.md)
 * [基石](./block-basic/README.md)
-  * [浮点数失精探究](./block-basic/B5-float-number.md)
+  * [0.1 + 0.2 = ? - 浮点数失精探究](./block-basic/B5-float-number.md)
 * [见知](./block-sight/README.md)
   * [2015年总结](./block-sight/A2-2015年总结.md)
   * [15年11月总结](./block-sight/A1-15年11月总结.md)
