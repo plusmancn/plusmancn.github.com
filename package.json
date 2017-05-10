@@ -4,8 +4,6 @@
   "description": "plusmanの手记",
   "main": "index.js",
   "scripts": {
-    "generate": "DEBUG=generate-index node tool/generate-index.js",
-    "publish": "DEBUG=generate-index node tool/generate-index.js && git commit -a && git push",
     "webhook": "DEBUG=* ./node_modules/.bin/github-webhook --config=.webhook.json"
   },
   "repository": {
@@ -22,6 +20,8 @@
   },
   "homepage": "https://github.com/plusmancn/plusmancn.github.com#readme",
   "devDependencies": {
+    "async": "^2.4.0",
+    "eslint": "^3.19.0",
     "github-webhook": "^1.1.3"
   }
 }

@@ -17,5 +17,6 @@
 * [基石](./block-basic/README.md)
   * [0.1 + 0.2 = ? - JS浮点数失精探究](./block-basic/B5-float-number.md)
 * [见知](./block-sight/README.md)
+  * [泳者](./block-sight/B6-泳者.md)
   * [2015年总结](./block-sight/A2-2015年总结.md)
   * [15年11月总结](./block-sight/A1-15年11月总结.md)

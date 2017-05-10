@@ -27,7 +27,7 @@
         "no-console": [
             "error",
             {
-                "allow": ["log", "info", "error"]
+                "allow": ["log", "info", "error", "time", "timeEnd"]
             }
         ],
         "guard-for-in": [
