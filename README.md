@@ -9,6 +9,13 @@
 * Gmail：plusmancn@gmail.com
 * 公司邮箱：liujianan@souche.com （欢迎投递简历）
 
+## 期望的自己
+```javascript
+apply: node, java?
+  |
+basic: cpp, network programming, little arithmetic
+```
+
 ## 历程
 2017-05-11: 终于用上 https 啦。
 
