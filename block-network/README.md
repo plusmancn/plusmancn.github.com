@@ -10,6 +10,7 @@
 
 ## http
 * [http2 explained][l2]
+* [Websocket Protocol RFC6455](https://tools.ietf.org/html/rfc6455)
 
 ## tcp/ip
 * [TCP/IP Reference](https://nmap.org/book/tcpip-ref.html)
@@ -20,6 +21,7 @@
 ## 语言基础
 * [C](http://www.cprogramming.com/tutorial/c-tutorial.html)
 * [C++](http://www.cplusplus.com/doc/tutorial/)
+* [C++静态库与动态库](http://www.cnblogs.com/skynet/p/3372855.html)
 
 ## 实践
 * [微信 Mars 移动网络框架](https://github.com/Tencent/mars)
