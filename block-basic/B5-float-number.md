@@ -148,11 +148,11 @@ JS 实现浮点数精确计算，最基本的原理是：将浮点数拆分成 `
 [l5]: https://medium.com/@maximus.koretskyi/how-to-round-binary-fractions-625c8fa3a1af "How to round binary numbers"
 [l6]: http://mathjs.org/ "math.js"
 [l7]: http://www.cnblogs.com/fsjohnhuang/p/5115672.html "浮点数失精"
-[m1]: http://mathjax.plusman.cn/svg/?m=V%3D(-1)%5ES%20*%20M%20*%202%5EE
+[m1]: https://mathjax.plusman.cn/svg/?m=V%3D(-1)%5ES%20*%20M%20*%202%5EE
 <!-- V=(-1)^S * M * 2^E -->
-[m2]: http://mathjax.plusman.cn/svg/?m=1.1%20%5Ctimes%202%5E%7B-1%7D%20%3D%200.0011%20%5Ctimes%202%5E2
+[m2]: https://mathjax.plusman.cn/svg/?m=1.1%20%5Ctimes%202%5E%7B-1%7D%20%3D%200.0011%20%5Ctimes%202%5E2
 <!-- 1.1 \times 2^{-1} = 0.0011 \times 2^2 -->
-[m3]: http://mathjax.plusman.cn/svg/?m=bias%20%3D%202%5E%7BL-1%7D%20-%201
+[m3]: https://mathjax.plusman.cn/svg/?m=bias%20%3D%202%5E%7BL-1%7D%20-%201
 <!-- bias = 2^{L-1} - 1 -->
 [img1]: ../images/bg2010060602.png "浮点数 64存储"
 [img2]: ../images/1-066QOYst0u8hqZAXhW8MJg.jpeg "舍入示例"
