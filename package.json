@@ -1,7 +1,7 @@
 {
   "name": "plusmancn.github.com",
   "version": "1.0.0",
-  "description": "plusmanの手记",
+  "description": "小楠想做个生活家",
   "main": "index.js",
   "scripts": {
     "webhook": "DEBUG=* ./node_modules/.bin/github-webhook --config=.webhook.json"

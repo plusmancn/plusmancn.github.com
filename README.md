@@ -10,6 +10,7 @@
 * 公司邮箱：liujianan@souche.com （欢迎投递简历）
 
 ## 期望的自己
+是个程序员，也能做个生活家
 ```javascript
 apply: node, java?
   |
