@@ -18,6 +18,7 @@
   * [0.1 + 0.2 = ? - JS浮点数失精探究](./block-basic/B5-float-number.md)
   * [Mysql Node CURD 简记](./block-basic/B7-mysql-node-curd.md)
 * [见知](./block-sight/README.md)
+  * [2017总结-舍得](./block-sight/B8-2017总结-舍得.md)
   * [泳者](./block-sight/B6-泳者.md)
   * [2015年总结](./block-sight/A2-2015年总结.md)
   * [15年11月总结](./block-sight/A1-15年11月总结.md)
