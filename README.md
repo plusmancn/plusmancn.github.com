@@ -18,7 +18,7 @@ basic: cpp, network programming, little arithmetic
 ```
 
 ## 历程
-2017-05-11: 终于用上 https 啦。
+2017-05-11: 终于用上 https 啦。  
 
 [l1]: http://plusman.cn "我的博客"
 [l2]: http://souche.com/ "souche.com"
