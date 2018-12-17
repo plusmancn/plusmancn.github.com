@@ -1,7 +1,7 @@
 {
   "name": "plusmancn.github.com",
   "version": "1.0.0",
-  "description": "小楠想做个生活家",
+  "description": "no description",
   "main": "index.js",
   "scripts": {
     "webhook": "DEBUG=* ./node_modules/.bin/github-webhook --config=.webhook.json"
@@ -20,8 +20,6 @@
   },
   "homepage": "https://github.com/plusmancn/plusmancn.github.com#readme",
   "devDependencies": {
-    "async": "^2.4.0",
-    "eslint": "^3.19.0",
     "github-webhook": "^1.1.3"
   }
 }
