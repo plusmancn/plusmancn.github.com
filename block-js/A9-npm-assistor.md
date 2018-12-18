@@ -1,10 +1,7 @@
----
-title: 'npm-assistor, npm 包初始化和 git tag 辅助工具'
-date: '2016-07-20 19:10:37'
-tags:
-- 'js'
-- 'node'
----
+```
+npm-assistor, npm 包初始化和 git tag 辅助工具
+创建于 2016-07-20 19:10:37
+```
 
 # npm-assistor
 > npm 包初始化和 git tag 辅助工具。源于搜车前端内部规范化改造，具体指内部功能模块 SDK 化和 GitFlow 流程规范化。Github: [https://github.com/plusmancn/npm-assistor](https://github.com/plusmancn/npm-assistor) 欢迎 star 和 pr

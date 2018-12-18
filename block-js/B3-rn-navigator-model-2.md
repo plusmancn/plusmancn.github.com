@@ -1,11 +1,7 @@
----
-title: '《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航'
-date: '2017-02-24 00:18:32'
-tags:
-- '从零开始搭建一个多端 IM'
-- 'react'
-- 'react-native'
----
+```
+《从零开始搭建一个多端 IM》贰：页面导航模式设计- Navigator 导航
+创建于 2017-02-24 00:18:32
+```
 
 > 具体实现参照：[UiLibrary/Navigator](https://github.com/im-js/im.js/tree/master/UiLibrary/Navigator)
 

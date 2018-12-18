@@ -14,9 +14,25 @@
     window.$docsify = {
       name: 'plusman.cn',
       repo: 'https://github.com/plusmancn/plusmancn.github.com',
-      loadSidebar: true
+      loadSidebar: true,
+      subMaxLevel: 2,
+      loadSidebar: true,
+      auto2top: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
+      noCompileLinks: [
+        '/images/.*',
+        '/resource/.*'
+      ],
+      noEmoji: true,
+      markdown: {
+        renderer: {}
+      }
     }
   </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
 </body>
 </html>

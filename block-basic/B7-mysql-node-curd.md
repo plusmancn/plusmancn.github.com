@@ -1,11 +1,7 @@
-<!-- ---
-title: 'Mysql Node CURD 简记'
-date: '2017-12-03 23:34:14'
-tags:
-- 'mysql'
-- 'node'
-- '基石'
---- -->
+```
+Mysql Node CURD 简记
+创建于 2017-12-03 23:34:14
+```
 
 ## 目录
 1. ORM 库选择

@@ -1,9 +1,7 @@
----
-title: '剖析 JS 内 0.1 + 0.2 = 0.30000000000000004 计算失精问题'
-date: '2017-05-01 22:35:38'
-tags:
-- '基石'
----
+```
+剖析 JS 内 0.1 + 0.2 = 0.30000000000000004 计算失精问题
+创建于 2017-05-01 22:35:38
+```
 
 ## 简述
 > 在 JS 内，`0.1 + 0.2 = 0.30000000000000004`，而不是想象中的 `0.3`。  
@@ -44,7 +42,7 @@ tags:
 ## 二进制浮点数 IEEE-754 表示
 [IEEE-754][l2] 按如下定义表示一个浮点数
 
-> ![浮点数表示][m1]  
+> $V=(-1)^S * M * 2^E$  
 > S 为标志位，0 为正数，1为负数  
 > M 代表有效数字，1 <= M < 2  
 > E 为指数位
@@ -55,9 +53,9 @@ tags:
 
 S 存储在 `sign` 位，占 1 bit。  
 
-M 存储在 `fraction`，由于 `fraction` 的首位总是 1，所以首位是被隐藏的，相当于有 53 bit 来存储。M 通过小数点左右移动，变更指数位来保证首位为 1。例如 ![][m2]
+M 存储在 `fraction`，由于 `fraction` 的首位总是 1，所以首位是被隐藏的，相当于有 53 bit 来存储。M 通过小数点左右移动，变更指数位来保证首位为 1。例如 $1.1 \times 2^{-1} = 0.0011 \times 2^2$
 
-E 存储在 `exponent`，全名为 `Biased-exponent`， 采用偏移的方式编码，即没有符号位，指定一个中间值为 0，大于这个值为正数，小于这个值为负数。设 `exponent` 占用了 `L` bit，中间值的计算方式为 ![][m3]。
+E 存储在 `exponent`，全名为 `Biased-exponent`， 采用偏移的方式编码，即没有符号位，指定一个中间值为 0，大于这个值为正数，小于这个值为负数。设 `exponent` 占用了 `L` bit，中间值的计算方式为 $bias = 2^{L-1} - 1$。
 
 ## Round to nearest, ties to even 舍入规则
 基于上面的规则，我们发现 `0.1` 的二进制表示，是无限循环小数，但是我们的 M 只有 53 bit 可用。  
@@ -129,7 +127,7 @@ JS 代码示例
 ```
 Bingo！证毕。
 
-通过上述演算，我们发现失精发生在舍入部分，换句话说，不能被 ![浮点数表示][m1] 精确表示的浮点数，在运算时会发生失精问题。
+通过上述演算，我们发现失精发生在舍入部分，换句话说，不能被 $V=(-1)^S * M * 2^E$ 精确表示的浮点数，在运算时会发生失精问题。
 
 ## 失精问题对策
 那么我们有哪些方法可以避免呢？
@@ -141,6 +139,8 @@ JS 实现浮点数精确计算，最基本的原理是：将浮点数拆分成 `
 这里不做深究，读者可自行查阅。
 
 
+
+
 [l1]: http://0.30000000000000004.com "0.30000000000000004.com"
 [l2]: ../resource/IEEE-754-2008.pdf "IEEE-754-2008.pdf"
 [l3]: http://stackoverflow.com/a/3954640/1914450 "convert float number to binary"
@@ -148,11 +148,5 @@ JS 实现浮点数精确计算，最基本的原理是：将浮点数拆分成 `
 [l5]: https://medium.com/@maximus.koretskyi/how-to-round-binary-fractions-625c8fa3a1af "How to round binary numbers"
 [l6]: http://mathjs.org/ "math.js"
 [l7]: http://www.cnblogs.com/fsjohnhuang/p/5115672.html "浮点数失精"
-[m1]: https://mathjax.plusman.cn/svg/?m=V%3D(-1)%5ES%20*%20M%20*%202%5EE
-<!-- V=(-1)^S * M * 2^E -->
-[m2]: https://mathjax.plusman.cn/svg/?m=1.1%20%5Ctimes%202%5E%7B-1%7D%20%3D%200.0011%20%5Ctimes%202%5E2
-<!-- 1.1 \times 2^{-1} = 0.0011 \times 2^2 -->
-[m3]: https://mathjax.plusman.cn/svg/?m=bias%20%3D%202%5E%7BL-1%7D%20-%201
-<!-- bias = 2^{L-1} - 1 -->
 [img1]: ../images/bg2010060602.png "浮点数 64存储"
 [img2]: ../images/1-066QOYst0u8hqZAXhW8MJg.jpeg "舍入示例"

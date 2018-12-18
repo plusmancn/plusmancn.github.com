@@ -1,9 +1,7 @@
----
-title: 'callback 和 promise 的错误捕获'
-date: '2016-05-09 01:18:43'
-tags:
-- 'js'
----
+```
+callback 和 promise 的错误捕获
+创建于 2016-05-09 01:18:43
+```
 
 ![ctp](../images/callbacks_promises.png?imageView2/2/w/920/interlace/0/q/100)
 > 1) 千万不要去尝试 catch callback 的回调错误，错误处理应交由 callbac 函数本身。开发中碰到过框架捕获了 callback 的错误，而且直接湮没了，导致代码出了问题，却不能察觉。  
