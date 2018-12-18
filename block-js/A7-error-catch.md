@@ -5,7 +5,7 @@ callback 和 promise 的错误捕获
 
 ![ctp](../images/callbacks_promises.png?imageView2/2/w/920/interlace/0/q/100)
 > 1) 千万不要去尝试 catch callback 的回调错误，错误处理应交由 callbac 函数本身。开发中碰到过框架捕获了 callback 的错误，而且直接湮没了，导致代码出了问题，却不能察觉。  
-2)  对于进程的 uncaughtException, unhandledRejection 事件，建议结合日志做一些监听处理。
+> 2)  对于进程的 uncaughtException, unhandledRejection 事件，建议结合日志做一些监听处理。
 
 <!-- more -->
 
