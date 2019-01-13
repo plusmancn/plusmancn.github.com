@@ -1,5 +1,15 @@
 # 网络编程
-> 万物皆互联
+
+## 基础概念
+### 时间概念
+**RTT**
+**MSL**
+**TTL**
+
+### 常见算法
+* [霍夫曼编码](https://zh.wikipedia.org/wiki/%E9%9C%8D%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81)
+* 最小有向图 - 路由表生成
+
 
 ## 网络编程如何入门
 * [陈硕: 谈一谈网络编程学习经验 PDF][l1]
@@ -29,6 +39,8 @@
 
 ## 抓包
 * [tcpdump](http://linuxwiki.github.io/NetTools/tcpdump.html)
+
+
 
 [l1]: ../resource/LearningNetworkProgramming.pdf "陈硕的网络编程入门"
 [l2]: https://bagder.gitbooks.io/http2-explained/en/
