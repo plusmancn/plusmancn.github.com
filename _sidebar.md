@@ -7,6 +7,7 @@
   * [Mysql Node CURD 简记](./block-basic/B7-mysql-node-curd.md)
   * [博客搭建备忘](./block-basic/how-to-build-a-blog.md)
 * JavaScript
+  * [AsyncHooks 探究](./block-js/node-async-hooks.md)
   * [RN 导航 Navigator 组件](./block-js/B3-rn-navigator-model-2.md)
   * [RN 导航 TabBar 组件](./block-js/B2-rn-navigator-model-1.md)
   * [Semver 2.0 中译](./block-js/B1-note-semver.md)

@@ -157,3 +157,5 @@ fabric.properties
 
 _book/
 *.webhook.log
+
+package-lock.json

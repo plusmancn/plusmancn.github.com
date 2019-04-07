@@ -1,11 +1,14 @@
 {
-  "name": "lab",
+  "name": "async_hooks",
   "version": "1.0.0",
-  "description": "lab",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^4.9.0"
+  }
 }
