@@ -3,6 +3,7 @@
 * 网络编程
   * [基础入门](./block-network/README.md)
 * 基础
+  * [20 分钟学会 Quartz Cron 配置](./block-basic/20-minutes-quartz-cron.md)
   * [0.1 + 0.2 = ? - JS浮点数失精探究](./block-basic/B5-float-number.md)
   * [Mysql Node CURD 简记](./block-basic/B7-mysql-node-curd.md)
   * [博客搭建备忘](./block-basic/how-to-build-a-blog.md)
