@@ -25,6 +25,7 @@
   * [2019-M1](./block-read/2019-M1.md)
   * [2019-M2](./block-read/2019-M2.md)
 * 随想
+  * [2019总结-痴迷](./block-sight/2019-summary.md)
   * [2018总结-跃迁](./block-sight/2018-summary.md)
   * [2017总结-舍得](./block-sight/B8-2017总结-舍得.md)
   * [2015总结-躁动](./block-sight/A2-2015年总结.md)
